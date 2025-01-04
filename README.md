@@ -28,8 +28,8 @@ This repository contains a curated dataset of educational policies, curricula, a
 - .[Finnish National Board of Education (2016). National Core Curriculum for Basic Education 2014.]
 - .[Ministerio de Educación, Chile (2020). Política Nacional de Convivencia Escolar.].
 ### National curriculum guidelines 
-- [National Council for the Social Studies (2017). College, Career, and Civic Life (C3) Framework for Social Studies State Standards.]
-- [Finnish National Agency for Education (2020). Curriculum reform 2016]
-- [Ministerio de Educación, Chile (2018). Bases Curriculares Primero a Sexto Básico]
+- [National Council for the Social Studies (2017). College, Career, and Civic Life (C3) Framework for Social Studies State Standards.](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.socialstudies.org/sites/default/files/c3/c3-framework-for-social-studies-rev0617.pdf&ved=2ahUKEwiXq4C11dyKAxW7fDABHcwxKTUQFnoECBUQAQ&usg=AOvVaw1bfsDw_n50qae_h8CIcknV)
+- [Finnish National Agency for Education (2020). Curriculum reform 2016](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://physiart.com/wp-content/uploads/2020/01/The-new-educational-curriculum-in-Finland.pdf&ved=2ahUKEwiJz6P81dyKAxU_RzABHT4dH44QFnoECBkQAQ&usg=AOvVaw0PXP9dhd0uhAv0Y_yEVUti)
+- [Ministerio de Educación, Chile (2018). Bases Curriculares Primero a Sexto Básico](https://bibliotecadigital.mineduc.cl/discover?filtertype=author&filter_relational_operator=equals&filter=Chile.%20Ministerio%20de%20Educaci%C3%B3n.%20Unidad%20de%20Curr%C3%ADculum%20y%20Evaluaci%C3%B3n%20(UCE))
 ## How to Use
-1. Clone this repository: 
+1. Clone this repository: https://github.com/sacred-slavery/educational-policies-dataset.git
