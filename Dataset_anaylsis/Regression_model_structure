@@ -1,0 +1,81 @@
+class RegressionAnalyzer:
+    def __init__(self):
+        """Initialize regression analyzer"""
+        self.models = {}
+        
+    def build_hierarchical_models(self, data):
+        """Build hierarchical regression models"""
+        
+        # Model 1: Base Model
+        # Well-being = β₀ + β₁(Market Orientation) + ε
+        X1 = data[['market_orientation']]
+        y = data['wellbeing_score']
+        model1 = sm.OLS(y, sm.add_constant(X1)).fit()
+        
+        # Model 2: Adding Moral Framework
+        # Well-being = β₀ + β₁(Market Orientation) + β₂(Moral Framework) + ε
+        X2 = data[['market_orientation', 'moral_framework']]
+        model2 = sm.OLS(y, sm.add_constant(X2)).fit()
+        
+        # Model 3: Full Model with Interactions
+        # Well-being = β₀ + β₁(Market Orientation) + β₂(Moral Framework) + 
+        #             β₃(Market × Moral) + β₄(System Efficiency) + ε
+        data['market_moral_interaction'] = data['market_orientation'] * data['moral_framework']
+        X3 = data[[
+            'market_orientation', 
+            'moral_framework',
+            'market_moral_interaction',
+            'system_efficiency'
+        ]]
+        model3 = sm.OLS(y, sm.add_constant(X3)).fit()
+        
+        self.models = {
+            'base': model1,
+            'moral': model2,
+            'full': model3
+        }
+        
+        return self.models
+    
+    def calculate_model_diagnostics(self):
+        """Calculate model diagnostics and fit statistics"""
+        diagnostics = {}
+        
+        for name, model in self.models.items():
+            diagnostics[name] = {
+                'r_squared': model.rsquared,
+                'adj_r_squared': model.rsquared_adj,
+                'aic': model.aic,
+                'bic': model.bic,
+                'f_stat': model.fvalue,
+                'f_pvalue': model.f_pvalue
+            }
+            
+        return diagnostics
+
+    def test_assumptions(self, data):
+        """Test regression assumptions"""
+        assumption_tests = {}
+        
+        for name, model in self.models.items():
+            # Normality test
+            _, normality_p = stats.normaltest(model.resid)
+            
+            # Heteroscedasticity test
+            _, hetero_p = stats.levene(data['market_orientation'], 
+                                     data['moral_framework'])
+            
+            # Multicollinearity test (VIF)
+            X = data[['market_orientation', 'moral_framework']]
+            vif_data = pd.DataFrame()
+            vif_data["Variable"] = X.columns
+            vif_data["VIF"] = [variance_inflation_factor(X.values, i) 
+                              for i in range(X.shape[1])]
+            
+            assumption_tests[name] = {
+                'normality_p': normality_p,
+                'heteroscedasticity_p': hetero_p,
+                'vif_data': vif_data
+            }
+            
+        return assumption_tests
