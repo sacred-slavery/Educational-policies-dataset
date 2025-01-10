@@ -215,3 +215,85 @@ The code processes documents through:
 3. Contextual Analysis: Examines how terms are used
 4. Structural Analysis: Analyzes document organization
 
+## Application of Document Analysis in Our Study
+
+def analyze_educational_systems():
+    """
+    Integrated analysis workflow for educational system comparison
+    """
+    # 1. Process Policy Documents
+    documents = {
+        'US': ['ESSA_2015.txt', 'State_Guidelines.txt', 'Character_Education.txt'],
+        'Finland': ['Basic_Education_Act.txt', 'National_Core_Curriculum.txt'],
+        'Chile': ['LGE_2009.txt', 'Curriculum_Framework.txt']
+    }
+    
+    results = {}
+    for country, docs in documents.items():
+        country_results = {
+            'market_metrics': [],
+            'moral_metrics': [],
+            'power_metrics': []
+        }
+        
+        for doc in docs:
+            # Apply CDA analysis
+            cda_results = analyze_policy_document(doc)
+            
+            # Extract key metrics
+            market_score = calculate_market_orientation(cda_results)
+            moral_score = calculate_moral_framework(cda_results)
+            power_score = calculate_power_relations(cda_results)
+            
+            # Store results
+            country_results['market_metrics'].append(market_score)
+            country_results['moral_metrics'].append(moral_score)
+            country_results['power_metrics'].append(power_score)
+        
+        # Calculate aggregate scores
+        results[country] = {
+            'market_orientation': np.mean(country_results['market_metrics']),
+            'moral_framework': np.mean(country_results['moral_metrics']),
+            'power_relations': np.mean(country_results['power_metrics'])
+        }
+    
+    return results
+
+def calculate_sacred_slavery_index(country_results):
+    """
+    Calculate Sacred Slavery Index based on CDA results
+    """
+    weights = {
+        'market_orientation': 0.4,
+        'moral_framework': 0.3,
+        'power_relations': 0.3
+    }
+    
+    ssi_scores = {}
+    for country, metrics in country_results.items():
+        ssi = (
+            weights['market_orientation'] * metrics['market_orientation'] +
+            weights['moral_framework'] * (5 - metrics['moral_framework']) +  # Inverse relationship
+            weights['power_relations'] * metrics['power_relations']
+        )
+        ssi_scores[country] = ssi
+    
+    return ssi_scores
+
+def integrate_with_quantitative_data(cda_results, pisa_data, nces_data):
+    """
+    Integrate CDA findings with quantitative metrics
+    """
+    integrated_analysis = {}
+    for country in cda_results.keys():
+        # Combine CDA scores with quantitative metrics
+        integrated_analysis[country] = {
+            'ssi_score': calculate_sacred_slavery_index(cda_results)[country],
+            'student_wellbeing': extract_wellbeing_metrics(pisa_data, country),
+            'system_efficiency': calculate_system_efficiency(nces_data, country)
+        }
+    
+    return integrated_analysis
+
+### 
+
