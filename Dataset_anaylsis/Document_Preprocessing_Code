@@ -1,0 +1,105 @@
+# Import required libraries
+import pandas as pd
+import numpy as np
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import re
+
+class PolicyDocumentProcessor:
+    def __init__(self):
+        self.lemmatizer = WordNetLemmatizer()
+        self.stop_words = set(stopwords.words('english'))
+        
+    def preprocess_document(self, text):
+        """
+        Preprocess policy document text through following steps:
+        1. Convert to lowercase
+        2. Remove special characters
+        3. Tokenize
+        4. Remove stopwords
+        5. Lemmatize words
+        """
+        # Convert to lowercase
+        text = text.lower()
+        
+        # Remove special characters
+        text = re.sub(r'[^a-zA-Z\s]', '', text)
+        
+        # Tokenize into words
+        words = word_tokenize(text)
+        
+        # Remove stopwords and lemmatize
+        processed_words = [
+            self.lemmatizer.lemmatize(word) 
+            for word in words 
+            if word not in self.stop_words
+        ]
+        
+        return ' '.join(processed_words)
+    
+    def extract_policy_sections(self, text, section_keywords):
+        """
+        Extract policy sections based on predefined keywords
+        Returns dictionary of relevant sections
+        """
+        sections = {}
+        sentences = sent_tokenize(text)
+        
+        for keyword, terms in section_keywords.items():
+            sections[keyword] = []
+            for sentence in sentences:
+                if any(term in sentence.lower() for term in terms):
+                    sections[keyword].append(sentence)
+                    
+        return sections
+
+    def get_document_statistics(self, text):
+        """Calculate basic document statistics"""
+        words = word_tokenize(text)
+        sentences = sent_tokenize(text)
+        
+        return {
+            'total_words': len(words),
+            'total_sentences': len(sentences),
+            'avg_sentence_length': len(words) / len(sentences),
+            'unique_words': len(set(words))
+        }
+
+# Example usage
+def analyze_policy_document(filepath):
+    processor = PolicyDocumentProcessor()
+    
+    # Define keywords for different policy aspects
+    keywords = {
+        'market_oriented': [
+            'efficiency', 'competition', 'choice', 'performance',
+            'accountability', 'standards'
+        ],
+        'moral_education': [
+            'ethics', 'values', 'character', 'moral', 'responsibility',
+            'development'
+        ],
+        'religious_content': [
+            'religion', 'faith', 'spiritual', 'belief', 'transcendent'
+        ]
+    }
+    
+    # Read and process document
+    with open(filepath, 'r', encoding='utf-8') as file:
+        text = file.read()
+    
+    # Get basic statistics
+    stats = processor.get_document_statistics(text)
+    
+    # Extract relevant sections
+    sections = processor.extract_policy_sections(text, keywords)
+    
+    # Preprocess entire document
+    processed_text = processor.preprocess_document(text)
+    
+    return {
+        'statistics': stats,
+        'sections': sections,
+        'processed_text': processed_text
+    }
