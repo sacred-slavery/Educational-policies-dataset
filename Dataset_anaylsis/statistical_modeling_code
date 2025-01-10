@@ -1,0 +1,89 @@
+# Statistical Modeling Implementation
+class EducationalSystemModeler:
+    def __init__(self, pisa_data, nces_data):
+        """Initialize statistical modeler"""
+        self.pisa_data = pisa_data
+        self.nces_data = nces_data
+        
+    def build_regression_models(self):
+        """Build hierarchical regression models"""
+        models = {}
+        
+        # Model 1: Market Orientation → Well-being
+        X1 = self.pisa_data[['market_orientation']]
+        y1 = self.pisa_data['wellbeing_score']
+        models['market_wellbeing'] = sm.OLS(y1, sm.add_constant(X1)).fit()
+        
+        # Model 2: Add Moral Framework
+        X2 = self.pisa_data[['market_orientation', 'moral_framework']]
+        y2 = self.pisa_data['wellbeing_score']
+        models['full_wellbeing'] = sm.OLS(y2, sm.add_constant(X2)).fit()
+        
+        return models
+    
+    def perform_correlation_analysis(self):
+        """Perform correlation analysis"""
+        variables = [
+            'market_orientation',
+            'moral_framework',
+            'wellbeing_score',
+            'achievement_score'
+        ]
+        
+        correlation_matrix = self.pisa_data[variables].corr()
+        
+        # Calculate p-values
+        p_values = pd.DataFrame(
+            np.zeros((len(variables), len(variables))),
+            columns=variables,
+            index=variables
+        )
+        
+        for i in variables:
+            for j in variables:
+                if i != j:
+                    r, p = stats.pearsonr(
+                        self.pisa_data[i],
+                        self.pisa_data[j]
+                    )
+                    p_values.loc[i,j] = p
+        
+        return {
+            'correlations': correlation_matrix,
+            'p_values': p_values
+        }
+    
+    def test_mediation_effects(self):
+        """Test mediation effects in the model"""
+        from statsmodels.stats.mediation import Mediation
+        
+        # Test moral framework as mediator
+        med = Mediation(
+            self.pisa_data['market_orientation'],  # independent
+            self.pisa_data['moral_framework'],     # mediator
+            self.pisa_data['wellbeing_score']      # dependent
+        ).fit()
+        
+        return med.summary()
+    
+    def calculate_effect_sizes(self):
+        """Calculate effect sizes for key relationships"""
+        effects = {}
+        
+        for var in ['market_orientation', 'moral_framework']:
+            d = (self.pisa_data[var].mean() - 
+                 self.pisa_data[var].mean()) / \
+                self.pisa_data[var].std()
+            effects[var] = {
+                'cohens_d': d,
+                'r_squared': self.models[f'{var}_wellbeing'].rsquared
+            }
+        
+        return effects
+
+# Example usage:
+modeler = EducationalSystemModeler(processed_pisa_data, processed_nces_data)
+regression_models = modeler.build_regression_models()
+correlation_results = modeler.perform_correlation_analysis()
+mediation_effects = modeler.test_mediation_effects()
+effect_sizes = modeler.calculate_effect_sizes()
