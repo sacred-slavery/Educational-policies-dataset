@@ -286,7 +286,8 @@ def integrate_with_quantitative_data(cda_results, pisa_data, nces_data):
     """
     integrated_analysis = {}
     for country in cda_results.keys():
-        # Combine CDA scores with quantitative metrics
+
+    # Combine CDA scores with quantitative metrics
         integrated_analysis[country] = {
             'ssi_score': calculate_sacred_slavery_index(cda_results)[country],
             'student_wellbeing': extract_wellbeing_metrics(pisa_data, country),
@@ -294,6 +295,101 @@ def integrate_with_quantitative_data(cda_results, pisa_data, nces_data):
         }
     
     return integrated_analysis
+    
 
+
+
+###This code demonstrates how we integrated our document analysis with broader research objectives:
+
+1. Document Processing Stage:
+- We analyzed multiple policy documents for each country
+- Applied CDA to identify patterns of market orientation, moral frameworks, and power relations
+- Generated standardized metrics for cross-country comparison
+
+2. Sacred Slavery Index Calculation:
+- Combined multiple metrics into a composite index
+- Weighted different aspects based on theoretical significance
+- Created comparable scores across educational systems
+
+3. Integration with Statistical Data:
+We then integrated these qualitative analyses with quantitative metrics through:
+
+def perform_statistical_analysis(integrated_data):
+    """
+    Statistical analysis of integrated CDA and quantitative data
+    """
+    # Create analysis dataframe
+    analysis_df = pd.DataFrame(integrated_data).T
+    
+    # Calculate correlations
+    correlations = {
+        'ssi_wellbeing': stats.pearsonr(
+            analysis_df['ssi_score'],
+            analysis_df['student_wellbeing']
+        ),
+        'ssi_efficiency': stats.pearsonr(
+            analysis_df['ssi_score'],
+            analysis_df['system_efficiency']
+        )
+    }
+    
+    # Regression analysis
+    X = analysis_df[['ssi_score', 'system_efficiency']]
+    y = analysis_df['student_wellbeing']
+    
+    model = sm.OLS(y, sm.add_constant(X))
+    results = model.fit()
+    
+    return {
+        'correlations': correlations,
+        'regression_results': results,
+        'descriptive_stats': analysis_df.describe()
+    }
+
+def generate_final_metrics():
+    """
+    Generate final metrics for research findings
+    """
+    # Process all documents
+    cda_results = analyze_educational_systems()
+    
+    # Calculate Sacred Slavery Index
+    ssi_scores = calculate_sacred_slavery_index(cda_results)
+    
+    # Integrate with quantitative data
+    integrated_data = integrate_with_quantitative_data(
+        cda_results,
+        pisa_data,
+        nces_data
+    )
+    
+    # Perform statistical analysis
+    statistical_results = perform_statistical_analysis(integrated_data)
+    
+    return {
+        'cda_results': cda_results,
+        'ssi_scores': ssi_scores,
+        'statistical_analysis': statistical_results
+    }
+
+
+###The integration process allowed us to:
+
+1. Validate CDA Findings:
+- Cross-reference qualitative patterns with quantitative metrics
+- Establish statistical significance of observed relationships
+- Identify systematic patterns across different data sources
+
+2. Generate Comparative Metrics:
+- Created standardized measures across educational systems
+- Developed composite indicators of market orientation and moral frameworks
+- Established quantitative bases for philosophical analysis
+
+3. Support Theoretical Framework:
+- Provided empirical support for theoretical constructs
+- Identified systematic relationships between market orientation and moral development
+- Validated philosophical insights with empirical patterns
+
+        
 ### 
 
