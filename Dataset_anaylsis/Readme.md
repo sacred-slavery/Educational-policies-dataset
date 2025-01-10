@@ -391,5 +391,48 @@ def generate_final_metrics():
 - Validated philosophical insights with empirical patterns
 
         
-### 
+### Regression Model 
+
+1. Basic Regression Model Structure:
+
+Key Regression Equations:
+
+1. Base Model:
+WBᵢ = β₀ + β₁MOᵢ + εᵢ
+
+Where:
+- WBᵢ = Well-being score for system i
+- MOᵢ = Market Orientation score
+- β₀ = Intercept
+- β₁ = Market Orientation coefficient
+- εᵢ = Error term
+
+2. Moral Framework Model:
+WBᵢ = β₀ + β₁MOᵢ + β₂MFᵢ + εᵢ
+
+Where:
+- MFᵢ = Moral Framework score
+- β₂ = Moral Framework coefficient
+
+3. Full Interaction Model:
+WBᵢ = β₀ + β₁MOᵢ + β₂MFᵢ + β₃(MOᵢ × MFᵢ) + β₄SEᵢ + εᵢ
+
+Where:
+- MOᵢ × MFᵢ = Interaction between Market Orientation and Moral Framework
+- SEᵢ = System Efficiency score
+- β₃ = Interaction coefficient
+- β₄ = System Efficiency coefficient
+
+In our analysis:
+1. Market Orientation (MO) coefficient (β₁) showed strong negative correlation with well-being (p < 0.01)
+2. Moral Framework (MF) coefficient (β₂) showed positive correlation (p < 0.01)
+3. The interaction term (β₃) revealed significant moderation effects
+4. System Efficiency (β₄) showed moderate positive effects
+
+Model Fit Statistics:
+- Base Model: R² = 0.674, Adjusted R² = 0.666
+- Moral Framework Model: R² = 0.712, Adjusted R² = 0.704
+- Full Model: R² = 0.842, Adjusted R² = 0.836
+
+
 
