@@ -1,0 +1,103 @@
+# Critical Discourse Analysis Implementation
+class CDAAnalyzer:
+    def __init__(self):
+        # Define discourse patterns for analysis
+        self.patterns = {
+            'power_patterns': {
+                'authority': ['must', 'shall', 'require', 'mandate'],
+                'control': ['assess', 'measure', 'evaluate', 'monitor'],
+                'resistance': ['may', 'can', 'option', 'choose']
+            },
+            'market_patterns': {
+                'efficiency': ['efficient', 'effective', 'optimize'],
+                'competition': ['compete', 'perform', 'rank', 'score'],
+                'choice': ['select', 'choice', 'option', 'alternative']
+            },
+            'moral_patterns': {
+                'values': ['ethic', 'moral', 'value', 'character'],
+                'community': ['collective', 'social', 'community'],
+                'development': ['growth', 'nurture', 'develop']
+            }
+        }
+    
+    def analyze_power_structures(self, text):
+        """
+        Analyze power relations in educational policies
+        Returns frequency and context of power-related language
+        """
+        results = {
+            'authority_metrics': self._count_pattern_frequency(
+                text, self.patterns['power_patterns']['authority']
+            ),
+            'control_mechanisms': self._identify_control_mechanisms(text),
+            'resistance_spaces': self._identify_resistance_spaces(text)
+        }
+        return results
+    
+    def analyze_market_discourse(self, text):
+        """
+        Analyze market-oriented language and neoliberal frameworks
+        """
+        results = {
+            'efficiency_metrics': self._count_pattern_frequency(
+                text, self.patterns['market_patterns']['efficiency']
+            ),
+            'competition_framework': self._analyze_competition_framework(text),
+            'choice_rhetoric': self._analyze_choice_rhetoric(text)
+        }
+        return results
+    
+    def analyze_moral_discourse(self, text):
+        """
+        Analyze moral and ethical frameworks in policies
+        """
+        results = {
+            'value_references': self._count_pattern_frequency(
+                text, self.patterns['moral_patterns']['values']
+            ),
+            'community_emphasis': self._analyze_community_emphasis(text),
+            'development_framework': self._analyze_development_framework(text)
+        }
+        return results
+    
+    def _count_pattern_frequency(self, text, patterns):
+        """Helper method to count pattern frequencies"""
+        count = 0
+        for pattern in patterns:
+            count += len(re.findall(r'\b' + pattern + r'\b', text.lower()))
+        return count
+    
+    def _identify_control_mechanisms(self, text):
+        """Identify and analyze control mechanisms in policies"""
+        mechanisms = []
+        sentences = sent_tokenize(text)
+        for sentence in sentences:
+            if any(term in sentence.lower() for term in self.patterns['power_patterns']['control']):
+                mechanisms.append(sentence)
+        return mechanisms
+    
+    def generate_cda_report(self, text):
+        """
+        Generate comprehensive CDA report
+        Combines all analyses into structured output
+        """
+        return {
+            'power_analysis': self.analyze_power_structures(text),
+            'market_analysis': self.analyze_market_discourse(text),
+            'moral_analysis': self.analyze_moral_discourse(text)
+        }
+
+# Example usage:
+analyzer = CDAAnalyzer()
+
+def process_policy_document(filepath):
+    with open(filepath, 'r', encoding='utf-8') as file:
+        text = file.read()
+    
+    # Generate CDA report
+    cda_report = analyzer.generate_cda_report(text)
+    
+    # Convert to DataFrame for statistical analysis
+    results_df = pd.DataFrame.from_dict(cda_report, orient='index')
+    
+    return results_df
