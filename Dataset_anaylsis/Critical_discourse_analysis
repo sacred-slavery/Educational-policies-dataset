@@ -1,0 +1,111 @@
+class CriticalDiscourseAnalyzer:
+    def __init__(self):
+        self.discourse_patterns = {
+            'market_hegemony': [
+                'efficiency', 'competition', 'choice', 'performance',
+                'accountability', 'standards', 'measurement'
+            ],
+            'moral_framework': [
+                'ethics', 'values', 'character', 'moral', 'responsibility',
+                'community', 'development'
+            ],
+            'power_relations': [
+                'authority', 'control', 'mandate', 'require', 'must',
+                'shall', 'compliance'
+            ]
+        }
+    
+    def analyze_power_relations(self, text):
+        """Analyze power relations and authority structures in text"""
+        power_metrics = {
+            'authority_instances': 0,
+            'control_mechanisms': 0,
+            'resistance_spaces': 0
+        }
+        
+        sentences = sent_tokenize(text)
+        for sentence in sentences:
+            words = word_tokenize(sentence.lower())
+            
+            # Count authority instances
+            if any(word in words for word in self.discourse_patterns['power_relations']):
+                power_metrics['authority_instances'] += 1
+            
+            # Identify control mechanisms
+            if any(mechanism in sentence.lower() for mechanism in 
+                  ['measure', 'assess', 'evaluate', 'monitor']):
+                power_metrics['control_mechanisms'] += 1
+            
+            # Identify potential spaces of resistance
+            if any(term in sentence.lower() for term in 
+                  ['choice', 'flexibility', 'adapt', 'modify']):
+                power_metrics['resistance_spaces'] += 1
+        
+        return power_metrics
+    
+    def analyze_market_discourse(self, text):
+        """Analyze market-oriented discourse patterns"""
+        market_metrics = {
+            'market_terminology_freq': 0,
+            'efficiency_emphasis': 0,
+            'competition_framework': 0
+        }
+        
+        sentences = sent_tokenize(text)
+        for sentence in sentences:
+            words = word_tokenize(sentence.lower())
+            
+            # Analyze market terminology frequency
+            market_terms = sum(1 for word in words 
+                             if word in self.discourse_patterns['market_hegemony'])
+            market_metrics['market_terminology_freq'] += market_terms
+            
+            # Analyze efficiency emphasis
+            if 'efficiency' in words or 'effective' in words:
+                market_metrics['efficiency_emphasis'] += 1
+            
+            # Analyze competition framework
+            if any(term in words for term in ['compete', 'performance', 'ranking']):
+                market_metrics['competition_framework'] += 1
+        
+        return market_metrics
+    
+    def analyze_moral_discourse(self, text):
+        """Analyze moral and ethical discourse patterns"""
+        moral_metrics = {
+            'value_references': 0,
+            'ethical_framework': 0,
+            'community_emphasis': 0
+        }
+        
+        sentences = sent_tokenize(text)
+        for sentence in sentences:
+            words = word_tokenize(sentence.lower())
+            
+            # Analyze value references
+            moral_terms = sum(1 for word in words 
+                            if word in self.discourse_patterns['moral_framework'])
+            moral_metrics['value_references'] += moral_terms
+            
+            # Analyze ethical framework
+            if any(term in words for term in ['ethic', 'moral', 'value']):
+                moral_metrics['ethical_framework'] += 1
+            
+            # Analyze community emphasis
+            if any(term in words for term in ['community', 'collective', 'social']):
+                moral_metrics['community_emphasis'] += 1
+        
+        return moral_metrics
+
+# Example usage
+analyzer = CriticalDiscourseAnalyzer()
+
+# Analyze policy documents
+analysis_results = {
+    'power_relations': analyzer.analyze_power_relations(text),
+    'market_discourse': analyzer.analyze_market_discourse(text),
+    'moral_discourse': analyzer.analyze_moral_discourse(text)
+}
+
+# Convert to DataFrame for statistical analysis
+cda_results = pd.DataFrame(analysis_results)
